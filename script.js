@@ -4,7 +4,7 @@ const newsContainer = document.getElementById("news-container");
 
 function getNews(category){
 
-let url = `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&max=10&token=${apiKey}`;
+let url = `https://api.allorigins.win/raw?url=https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&max=10&token=${apiKey}`;
 
 fetch(url)
 .then(response => response.json())
@@ -38,7 +38,7 @@ function searchNews(){
 
 let query = document.getElementById("search-input").value;
 
-let url = `https://gnews.io/api/v4/search?q=${query}&lang=en&max=20&token=${apiKey}`;
+let url = `https://api.allorigins.win/raw?url=https://gnews.io/api/v4/search?q=${query}&lang=en&max=20&token=${apiKey}`;
 
 fetch(url)
 .then(response => response.json())
