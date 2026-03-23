@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewsHub</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>NewsHub</h1>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <button onclick="getNews('general')">Home</button>
+        <button onclick="getNews('technology')">Technology</button>
+        <button onclick="getNews('sports')">Sports</button>
+        <button onclick="getNews('business')">Business</button>
+        <button onclick="getNews('health')">World</button>
+    </nav>
+    <div class="search-bar"></div>
+    <input type="text" id="search-input" placeholder="Search news...">
+    <button onclick="searchNews()">Search</button>
+    </div>
+
+    <main>
+
+    <!-- News Section -->
+    <main>
+
+        <div id="news-container">
+
+            <!-- News Card 1 -->
+            <div class="news-card">
+                <img src="https://via.placeholder.com/300">
+                <h3>Sample News Title</h3>
+                <p>This is a sample description for the news article.</p>
+                <a href="#">Read More</a>
+            </div>
+
+            <!-- News Card 2 -->
+            <div class="news-card">
+                <img src="https://via.placeholder.com/300">
+                <h3>Technology Update</h3>
+                <p>Latest updates from the technology world.</p>
+                <a href="#">Read More</a>
+            </div>
+
+            <!-- News Card 3 -->
+            <div class="news-card">
+                <img src="https://via.placeholder.com/300">
+                <h3>Sports Highlights</h3>
+                <p>Top sports stories and match highlights.</p>
+                <a href="#">Read More</a>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
