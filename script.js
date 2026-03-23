@@ -4,7 +4,7 @@ const newsContainer = document.getElementById("news-container");
 
 function getNews(category){
 
-let url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${apiKey}`;
+let url = `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&max=10&token=${apiKey}`;
 
 fetch(url)
 .then(response => response.json())
@@ -14,11 +14,11 @@ newsContainer.innerHTML = "";
 
 data.articles.forEach(article => {
 
-if(!article.urlToImage || !article.description || article.description.length < 50) return;
+if(!article.image || !article.description || article.description.length < 50) return;
 
 let card = `
 <div class="news-card">
-<img src="${article.urlToImage}">
+<img src="${article.image}">
 <h3>${article.title}</h3>
 <p>${article.description}</p>
 <a href="${article.url}" target="_blank">Read More</a>
@@ -38,7 +38,7 @@ function searchNews(){
 
 let query = document.getElementById("search-input").value;
 
-let url = `https://newsapi.org/v2/everything?qInTitle=${query}&language=en&sortBy=relevancy&pageSize=20&apiKey=${apiKey}`;
+let url = `https://gnews.io/api/v4/search?q=${query}&lang=en&max=20&token=${apiKey}`;
 
 fetch(url)
 .then(response => response.json())
@@ -48,9 +48,11 @@ newsContainer.innerHTML = "";
 
 data.articles.forEach(article => {
 
+if(!article.image || !article.description) return;
+
 let card = `
 <div class="news-card">
-<img src="${article.urlToImage}">
+<img src="${article.image}">
 <h3>${article.title}</h3>
 <p>${article.description}</p>
 <a href="${article.url}" target="_blank">Read More</a>
