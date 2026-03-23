@@ -1,26 +1,29 @@
-const apiKey = "6b306bb099d8e1f7756842bff937b644";
+const apiKey = "JERy7NQ3U90I5HsYxp2x1lxFxztkUQ_401LVSvSCICPTqCL5";
 
 const newsContainer = document.getElementById("news-container");
 
-function getNews(category){
+function getNews(){
 
-let url = `https://api.allorigins.win/raw?url=https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&max=10&token=${apiKey}`;
+const url = `https://api.currentsapi.services/v1/latest-news?apiKey=${apiKey}`;
 
 fetch(url)
-.then(response => response.json())
+.then(res => res.json())
 .then(data => {
 
 newsContainer.innerHTML = "";
 
-data.articles.forEach(article => {
+if(!data.news){
+newsContainer.innerHTML = "<p>No news available</p>";
+return;
+}
 
-if(!article.image || !article.description || article.description.length < 50) return;
+data.news.forEach(article => {
 
-let card = `
+const card = `
 <div class="news-card">
-<img src="${article.image}">
+<img src="${article.image || ''}">
 <h3>${article.title}</h3>
-<p>${article.description}</p>
+<p>${article.description || ''}</p>
 <a href="${article.url}" target="_blank">Read More</a>
 </div>
 `;
@@ -29,32 +32,40 @@ newsContainer.innerHTML += card;
 
 });
 
+})
+.catch(err => {
+console.error(err);
+newsContainer.innerHTML = "<p>Failed to load news</p>";
 });
+
 }
 
-getNews("general");
+getNews();
 
 function searchNews(){
 
-let query = document.getElementById("search-input").value;
+const query = document.getElementById("search-input").value;
 
-let url = `https://api.allorigins.win/raw?url=https://gnews.io/api/v4/search?q=${query}&lang=en&max=20&token=${apiKey}`;
+const url = `https://api.currentsapi.services/v1/search?keywords=${query}&apiKey=${apiKey}`;
 
 fetch(url)
-.then(response => response.json())
+.then(res => res.json())
 .then(data => {
 
 newsContainer.innerHTML = "";
 
-data.articles.forEach(article => {
+if(!data.news){
+newsContainer.innerHTML = "<p>No results found</p>";
+return;
+}
 
-if(!article.image || !article.description) return;
+data.news.forEach(article => {
 
-let card = `
+const card = `
 <div class="news-card">
-<img src="${article.image}">
+<img src="${article.image || ''}">
 <h3>${article.title}</h3>
-<p>${article.description}</p>
+<p>${article.description || ''}</p>
 <a href="${article.url}" target="_blank">Read More</a>
 </div>
 `;
@@ -63,6 +74,10 @@ newsContainer.innerHTML += card;
 
 });
 
+})
+.catch(err => {
+console.error(err);
+newsContainer.innerHTML = "<p>Search failed</p>";
 });
 
 }
