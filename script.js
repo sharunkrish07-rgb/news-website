@@ -1,30 +1,34 @@
-const apiKey = "JERy7NQ3U90I5HsYxp2x1lxFxztkUQ_401LVSvSCICPTqCL5";
+const apiKey = "ad3bd389f50043749560273da7f8610a";
 
 const newsContainer = document.getElementById("news-container");
 
-function getNews(){
+function getNews(category){
 
-const url = `https://api.currentsapi.services/v1/latest-news?apiKey=${apiKey}`;
+let url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${apiKey}`;
 
 fetch(url)
-.then(res => res.json())
+.then(response => response.json())
 .then(data => {
 
 newsContainer.innerHTML = "";
 
-if(!data.news){
-newsContainer.innerHTML = "<p>No news available</p>";
-return;
-}
+data.articles.forEach(article => {
 
-data.news.forEach(article => {
+if(!article.urlToImage || !article.description || article.description.length < 50) return;
 
-const card = `
+let card = `
 <div class="news-card">
-<img src="${article.image || ''}">
+<img src="${article.urlToImage}">
 <h3>${article.title}</h3>
-<p>${article.description || ''}</p>
+<p>${article.description}</p>
+
 <a href="${article.url}" target="_blank">Read More</a>
+
+<button class="summarise-btn"
+data-text="${(article.title + ' ' + article.description).replace(/"/g,'&quot;')}">
+Summarise
+</button>
+
 </div>
 `;
 
@@ -32,40 +36,37 @@ newsContainer.innerHTML += card;
 
 });
 
-})
-.catch(err => {
-console.error(err);
-newsContainer.innerHTML = "<p>Failed to load news</p>";
 });
-
 }
 
-getNews();
+getNews("general");
 
 function searchNews(){
 
-const query = document.getElementById("search-input").value;
+let query = document.getElementById("search-input").value;
 
-const url = `https://api.currentsapi.services/v1/search?keywords=${query}&apiKey=${apiKey}`;
+let url = `https://newsapi.org/v2/everything?qInTitle=${query}&language=en&sortBy=relevancy&pageSize=20&apiKey=${apiKey}`;
 
 fetch(url)
-.then(res => res.json())
+.then(response => response.json())
 .then(data => {
 
 newsContainer.innerHTML = "";
 
-if(!data.news){
-newsContainer.innerHTML = "<p>No results found</p>";
+
+if(data.articles.length === 0){
+newsContainer.innerHTML = "<h2>No news found</h2>";
 return;
 }
+data.articles.forEach(article => {
 
-data.news.forEach(article => {
+document.getElementById("search-input").value = "";
 
-const card = `
+let card = `
 <div class="news-card">
-<img src="${article.image || ''}">
+<img src="${article.urlToImage}">
 <h3>${article.title}</h3>
-<p>${article.description || ''}</p>
+<p>${article.description}</p>
 <a href="${article.url}" target="_blank">Read More</a>
 </div>
 `;
@@ -74,10 +75,28 @@ newsContainer.innerHTML += card;
 
 });
 
-})
-.catch(err => {
-console.error(err);
-newsContainer.innerHTML = "<p>Search failed</p>";
 });
 
 }
+
+function summarizeNews(text){
+
+localStorage.setItem("newsText", text);
+
+window.location.href = "summary.html";
+
+}
+
+document.addEventListener("click", function(e){
+
+if(e.target.classList.contains("summarise-btn")){
+
+let text = e.target.getAttribute("data-text");
+
+localStorage.setItem("newsText", text);
+
+window.location.href = "summary.html";
+
+}
+
+});
